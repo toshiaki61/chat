@@ -1,4 +1,19 @@
 {
   "version": 2,
-  "projects": {}
+  "projects": {
+    "admin-backend": "apps/admin/backend",
+    "admin-frontend-card": "apps/admin/frontend/card",
+    "admin-frontend-card-e2e": "apps/admin/frontend/card-e2e",
+    "admin-frontend-shell": "apps/admin/frontend/shell",
+    "admin-frontend-shell-e2e": "apps/admin/frontend/shell-e2e",
+    "admin-frontend-talk": "apps/admin/frontend/talk",
+    "admin-frontend-talk-e2e": "apps/admin/frontend/talk-e2e",
+    "admin-shared-state": "libs/admin/shared/state",
+    "admin-shared-worker": "libs/admin/shared/worker",
+    "chat-backend": "apps/chat/backend",
+    "chat-frontend": "apps/chat/frontend",
+    "chat-frontend-e2e": "apps/chat/frontend-e2e",
+    "shared-data": "libs/shared/data",
+    "shared-middleware": "libs/shared/middleware"
+  }
 }

@@ -1,0 +1,29 @@
+{
+  "root": "apps/admin/frontend/shell-e2e",
+  "sourceRoot": "apps/admin/frontend/shell-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/admin/frontend/shell-e2e/cypress.json",
+        "devServerTarget": "admin-frontend-shell:serve:development",
+        "baseUrl": "http://localhost:4200"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "admin-frontend-shell:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/admin/frontend/shell-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["admin-frontend-shell"]
+}

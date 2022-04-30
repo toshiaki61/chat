@@ -1,0 +1,102 @@
+{
+  "root": "apps/admin/frontend/shell",
+  "sourceRoot": "apps/admin/frontend/shell/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "swc",
+        "outputPath": "dist/apps/admin/frontend/shell",
+        "index": "apps/admin/frontend/shell/src/index.html",
+        "baseHref": "/",
+        "main": "apps/admin/frontend/shell/src/main.ts",
+        "polyfills": "apps/admin/frontend/shell/src/polyfills.ts",
+        "tsConfig": "apps/admin/frontend/shell/tsconfig.app.json",
+        "assets": [
+          "apps/admin/frontend/shell/src/favicon.ico",
+          "apps/admin/frontend/shell/src/assets"
+        ],
+        "styles": ["apps/admin/frontend/shell/src/styles.scss"],
+        "scripts": [],
+        "webpackConfig": "apps/admin/frontend/shell/webpack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "extractLicenses": false,
+          "optimization": false,
+          "sourceMap": true,
+          "vendorChunk": true
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/admin/frontend/shell/src/environments/environment.ts",
+              "with": "apps/admin/frontend/shell/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "webpackConfig": "apps/admin/frontend/shell/webpack.config.prod.js"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/react:module-federation-dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "admin-frontend-shell:build",
+        "hmr": true,
+        "port": 4200,
+        "proxyConfig": "apps/admin/frontend/shell/proxy.conf.json"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "admin-frontend-shell:build:development"
+        },
+        "production": {
+          "buildTarget": "admin-frontend-shell:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/admin/frontend/shell/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/admin/frontend/shell"],
+      "options": {
+        "jestConfig": "apps/admin/frontend/shell/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/web:file-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "admin-frontend-shell:build",
+        "port": 4200
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "admin-frontend-shell:build:development"
+        },
+        "production": {
+          "buildTarget": "admin-frontend-shell:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

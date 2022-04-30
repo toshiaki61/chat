@@ -1,0 +1,28 @@
+{
+  "root": "apps/admin/frontend/talk-e2e",
+  "sourceRoot": "apps/admin/frontend/talk-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/admin/frontend/talk-e2e/cypress.json",
+        "devServerTarget": "admin-frontend-talk:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "admin-frontend-talk:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/admin/frontend/talk-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["admin-frontend-talk"]
+}

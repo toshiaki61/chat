@@ -14,7 +14,16 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@toshiaki61/admin/shared/state": [
+        "libs/admin/shared/state/src/index.ts"
+      ],
+      "@toshiaki61/admin/shared/worker": [
+        "libs/admin/shared/worker/src/index.ts"
+      ],
+      "@toshiaki61/shared/data": ["libs/shared/data/src/index.ts"],
+      "@toshiaki61/shared/middleware": ["libs/shared/middleware/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

@@ -1,0 +1,23 @@
+{
+  "root": "libs/admin/shared/worker",
+  "sourceRoot": "libs/admin/shared/worker/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/admin/shared/worker/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/admin/shared/worker"],
+      "options": {
+        "jestConfig": "libs/admin/shared/worker/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

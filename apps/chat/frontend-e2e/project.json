@@ -1,0 +1,28 @@
+{
+  "root": "apps/chat/frontend-e2e",
+  "sourceRoot": "apps/chat/frontend-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/chat/frontend-e2e/cypress.json",
+        "devServerTarget": "chat-frontend:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "chat-frontend:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/chat/frontend-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["chat-frontend"]
+}

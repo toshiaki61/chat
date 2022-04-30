@@ -1,0 +1,28 @@
+{
+  "root": "apps/admin/frontend/card-e2e",
+  "sourceRoot": "apps/admin/frontend/card-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/admin/frontend/card-e2e/cypress.json",
+        "devServerTarget": "admin-frontend-card:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "admin-frontend-card:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/admin/frontend/card-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["admin-frontend-card"]
+}
