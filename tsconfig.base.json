@@ -14,15 +14,25 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "typeRoots": ["node_modules/@types"],
     "paths": {
-      "@toshiaki61/admin/shared/state": [
-        "libs/admin/shared/state/src/index.ts"
+      "@chat-ex/admin/shared/state": ["libs/admin/shared/state/src/index.ts"],
+      "@chat-ex/admin/shared/worker": ["libs/admin/shared/worker/src/index.ts"],
+      "@chat-ex/chat/backend/modules/message": [
+        "libs/chat/backend/modules/message/src/index.ts"
       ],
-      "@toshiaki61/admin/shared/worker": [
-        "libs/admin/shared/worker/src/index.ts"
+      "@chat-ex/chat/frontend/api/message": [
+        "libs/chat/frontend/api/message/src/index.ts"
       ],
-      "@toshiaki61/shared/data": ["libs/shared/data/src/index.ts"],
-      "@toshiaki61/shared/middleware": ["libs/shared/middleware/src/index.ts"]
+      "@chat-ex/chat/frontend/components/message": [
+        "libs/chat/frontend/components/message/src/index.ts"
+      ],
+      "@chat-ex/shared/api": ["libs/shared/api/src/index.ts"],
+      "@chat-ex/shared/data": ["libs/shared/data/src/index.ts"],
+      "@chat-ex/shared/filters": ["libs/shared/filters/src/index.ts"],
+      "@chat-ex/shared/interceptors": ["libs/shared/interceptors/src/index.ts"],
+      "@chat-ex/shared/state": ["libs/shared/state/src/index.ts"],
+      "@chat-ex/shared/utils": ["libs/shared/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

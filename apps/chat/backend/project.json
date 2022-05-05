@@ -27,9 +27,26 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/node:node",
+      "executor": "@nrwl/node:webpack",
       "options": {
-        "buildTarget": "chat-backend:build"
+        "outputPath": "dist/apps/chat/backend",
+        "main": "apps/chat/backend/src/main.ts",
+        "tsConfig": "apps/chat/backend/tsconfig.app.json",
+        "assets": ["apps/chat/backend/src/assets"],
+        "webpackConfig": "apps/chat/backend/webpack.config.js",
+        "externalDependencies": [
+          "webpack/hot/poll?100",
+          "cache-manager",
+          "class-validator",
+          "class-transformer",
+          "@nestjs/common",
+          "@nestjs/core",
+          "@nestjs/mapped-types",
+          "@nestjs/microservices",
+          "@nestjs/swagger",
+          "mongodb"
+        ],
+        "watch": true
       }
     },
     "lint": {

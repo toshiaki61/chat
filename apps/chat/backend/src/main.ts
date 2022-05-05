@@ -1,22 +1,63 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
+import {
+  ClassSerializerInterceptor,
+  Logger,
+  ValidationPipe,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory, Reflector } from '@nestjs/core';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { JsonLoggerService, RequestLogger } from 'json-logger-service';
 
-import { Logger } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { Env } from '@chat-ex/shared/data';
 
-import { AppModule } from './app/app.module';
+import { AppModule } from './app';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new JsonLoggerService('NestServer'),
+  });
+  app.use(RequestLogger.buildExpressRequestLogger());
+  const config = app.get<ConfigService<Env>>(ConfigService);
+
+  // app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector),{
+
+  //   excludePrefixes: ['socket'] }));
+  app.useGlobalPipes(new ValidationPipe({ skipMissingProperties: true }));
+
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 3333;
-  await app.listen(port);
+
+  if (config.get('SWAGGER_ENABLED')) {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle('API ')
+      .setVersion('1.0')
+      .build();
+
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup('docs', app, document);
+  }
+
+  const port = config.get('PORT') || 4444;
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.REDIS,
+    options: {
+      url: config.get('REDIS_URI') ?? 'redis://localhost:6379',
+    },
+  });
+
+  await app
+    .startAllMicroservices()
+    .catch((err) => Logger.error('failed to start services', err));
+  await app.listen(port).catch((err) => Logger.error('failed to listen', err));
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
   );
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 
 bootstrap();

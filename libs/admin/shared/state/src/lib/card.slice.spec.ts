@@ -11,7 +11,7 @@ describe('card reducer', () => {
   });
 
   it('should handle fetchCards', () => {
-    let state = cardReducer(undefined, fetchCard.pending(null, null));
+    let state = cardReducer(undefined, fetchCard.pending(''));
 
     expect(state).toEqual(
       expect.objectContaining({
@@ -21,7 +21,7 @@ describe('card reducer', () => {
       })
     );
 
-    state = cardReducer(state, fetchCard.fulfilled([{ id: 1 }], null, null));
+    state = cardReducer(state, fetchCard.fulfilled([{ id: 1 }], ''));
 
     expect(state).toEqual(
       expect.objectContaining({
@@ -31,10 +31,7 @@ describe('card reducer', () => {
       })
     );
 
-    state = cardReducer(
-      state,
-      fetchCard.rejected(new Error('Uh oh'), null, null)
-    );
+    state = cardReducer(state, fetchCard.rejected(new Error('Uh oh'), ''));
 
     expect(state).toEqual(
       expect.objectContaining({

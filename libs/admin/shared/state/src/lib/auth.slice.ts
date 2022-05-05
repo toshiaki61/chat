@@ -18,7 +18,8 @@ export interface AuthEntity {
 
 export interface AuthState extends EntityState<AuthEntity> {
   loadingStatus: 'not loaded' | 'loading' | 'loaded' | 'error';
-  error: string;
+  error?: string;
+  authenticated: boolean;
 }
 
 export const authAdapter = createEntityAdapter<AuthEntity>();
@@ -40,7 +41,7 @@ export const authAdapter = createEntityAdapter<AuthEntity>();
  * }, [dispatch]);
  * ```
  */
-export const fetchAuth = createAsyncThunk(
+export const fetchAuth = createAsyncThunk<AuthEntity[]>(
   'auth/fetchStatus',
   async (_, thunkAPI) => {
     /**
@@ -53,8 +54,11 @@ export const fetchAuth = createAsyncThunk(
 );
 
 export const initialAuthState: AuthState = authAdapter.getInitialState({
+  ids: [],
+
   loadingStatus: 'not loaded',
-  error: null,
+  error: undefined,
+  authenticated: false,
 });
 
 export const authSlice = createSlice({
@@ -63,7 +67,9 @@ export const authSlice = createSlice({
   reducers: {
     add: authAdapter.addOne,
     remove: authAdapter.removeOne,
-    // ...
+    login: (state) => {
+      state.authenticated = true;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -125,8 +131,9 @@ export const authActions = authSlice.actions;
  */
 const { selectAll, selectEntities } = authAdapter.getSelectors();
 
-export const getAuthState = (rootState: unknown): AuthState =>
-  rootState[AUTH_FEATURE_KEY];
+export const getAuthState = (rootState: {
+  [AUTH_FEATURE_KEY]: AuthState;
+}): AuthState => rootState[AUTH_FEATURE_KEY];
 
 export const selectAllAuth = createSelector(getAuthState, selectAll);
 

@@ -1,0 +1,25 @@
+{
+  "root": "libs/chat/frontend/components/message",
+  "sourceRoot": "libs/chat/frontend/components/message/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/chat/frontend/components/message/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/chat/frontend/components/message"],
+      "options": {
+        "jestConfig": "libs/chat/frontend/components/message/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

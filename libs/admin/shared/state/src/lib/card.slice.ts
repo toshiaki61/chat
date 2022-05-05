@@ -18,7 +18,7 @@ export interface CardEntity {
 
 export interface CardState extends EntityState<CardEntity> {
   loadingStatus: 'not loaded' | 'loading' | 'loaded' | 'error';
-  error: string;
+  error?: string;
 }
 
 export const cardAdapter = createEntityAdapter<CardEntity>();
@@ -40,7 +40,7 @@ export const cardAdapter = createEntityAdapter<CardEntity>();
  * }, [dispatch]);
  * ```
  */
-export const fetchCard = createAsyncThunk(
+export const fetchCard = createAsyncThunk<CardEntity[]>(
   'card/fetchStatus',
   async (_, thunkAPI) => {
     /**
@@ -54,7 +54,7 @@ export const fetchCard = createAsyncThunk(
 
 export const initialCardState: CardState = cardAdapter.getInitialState({
   loadingStatus: 'not loaded',
-  error: null,
+  error: undefined,
 });
 
 export const cardSlice = createSlice({
@@ -125,8 +125,9 @@ export const cardActions = cardSlice.actions;
  */
 const { selectAll, selectEntities } = cardAdapter.getSelectors();
 
-export const getCardState = (rootState: unknown): CardState =>
-  rootState[CARD_FEATURE_KEY];
+export const getCardState = (rootState: {
+  [CARD_FEATURE_KEY]: CardState;
+}): CardState => rootState[CARD_FEATURE_KEY];
 
 export const selectAllCard = createSelector(getCardState, selectAll);
 

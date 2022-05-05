@@ -1,0 +1,35 @@
+{
+  "root": "libs/shared/api",
+  "sourceRoot": "libs/shared/api/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/api/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/api"],
+      "options": {
+        "jestConfig": "libs/shared/api/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "api": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "pnpx ts-node --project libs/shared/api/tsconfig.app.json libs/shared/api/src/openapi.ts"
+      }
+    },
+    "api-generate": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "pnpx rtk-query-codegen-openapi libs/shared/api/openapi-config.ts"
+      }
+    }
+  },
+  "tags": []
+}

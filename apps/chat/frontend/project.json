@@ -52,6 +52,7 @@
       "options": {
         "buildTarget": "chat-frontend:build",
         "hmr": true,
+        "port": 5200,
         "proxyConfig": "apps/chat/frontend/proxy.conf.json"
       },
       "configurations": {

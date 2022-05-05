@@ -11,7 +11,7 @@ describe('auth reducer', () => {
   });
 
   it('should handle fetchAuths', () => {
-    let state = authReducer(undefined, fetchAuth.pending(null, null));
+    let state = authReducer(undefined, fetchAuth.pending(''));
 
     expect(state).toEqual(
       expect.objectContaining({
@@ -21,7 +21,7 @@ describe('auth reducer', () => {
       })
     );
 
-    state = authReducer(state, fetchAuth.fulfilled([{ id: 1 }], null, null));
+    state = authReducer(state, fetchAuth.fulfilled([{ id: 1 }], ''));
 
     expect(state).toEqual(
       expect.objectContaining({
@@ -31,10 +31,7 @@ describe('auth reducer', () => {
       })
     );
 
-    state = authReducer(
-      state,
-      fetchAuth.rejected(new Error('Uh oh'), null, null)
-    );
+    state = authReducer(state, fetchAuth.rejected(new Error('Uh oh'), ''));
 
     expect(state).toEqual(
       expect.objectContaining({

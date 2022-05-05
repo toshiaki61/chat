@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "plugins": ["@nrwl/nx", "import"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -23,8 +23,56 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
-      "rules": {}
+      "extends": [
+        "plugin:@nrwl/nx/typescript",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript"
+      ],
+      "rules": {
+        "import/no-unresolved": [
+          "error",
+          { "commonjs": true, "amd": true, "ignore": ["Module$"] }
+        ],
+        "import/named": "off",
+        "import/namespace": "off",
+        "import/default": "error",
+        "import/export": "error",
+        "import/order": [
+          "warn",
+          {
+            "groups": [
+              "builtin",
+              "external",
+              "internal",
+              "parent",
+              "sibling",
+              "index",
+              "object",
+              "type"
+            ],
+            "newlines-between": "always",
+            "pathGroupsExcludedImportTypes": ["builtin"],
+            "alphabetize": { "order": "asc", "caseInsensitive": true },
+            "pathGroups": [
+              {
+                "pattern": "@chat-ex/**",
+                "group": "internal",
+                "position": "before"
+              }
+            ]
+          }
+        ]
+      },
+      "settings": {
+        "import/parsers": { "@typescript-eslint/parser": [".ts", ".tsx"] },
+        "import/resolver": {
+          "typescript": {
+            "alwaysTryTypes": true,
+            "project": ["apps/**/tsconfig.json", "libs/**/tsconfig.json"]
+          }
+        }
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

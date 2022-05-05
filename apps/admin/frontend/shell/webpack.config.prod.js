@@ -1,3 +1,5 @@
+const { merge } = require('webpack-merge');
+
 const withModuleFederation = require('@nrwl/react/module-federation');
 const moduleFederationConfig = require('./module-federation.config');
 
@@ -24,4 +26,18 @@ module.exports = withModuleFederation({
     ['admin-frontend-card', '//localhost:4201/'],
     ['admin-frontend-talk', '//localhost:4202/'],
   ],
-});
+}).then(
+  (federation) => (config) =>
+    federation(
+      merge(config, {
+        module: {
+          rules: [
+            {
+              test: /\.worker\.ts$/i,
+              use: [{ loader: 'worker-loader' }, { loader: 'swc-loader' }],
+            },
+          ],
+        },
+      })
+    )
+);

@@ -1,0 +1,23 @@
+{
+  "root": "libs/shared/state",
+  "sourceRoot": "libs/shared/state/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/state/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/state"],
+      "options": {
+        "jestConfig": "libs/shared/state/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

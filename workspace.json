@@ -11,9 +11,16 @@
     "admin-shared-state": "libs/admin/shared/state",
     "admin-shared-worker": "libs/admin/shared/worker",
     "chat-backend": "apps/chat/backend",
+    "chat-backend-modules-message": "libs/chat/backend/modules/message",
     "chat-frontend": "apps/chat/frontend",
+    "chat-frontend-api-message": "libs/chat/frontend/api/message",
+    "chat-frontend-components-message": "libs/chat/frontend/components/message",
     "chat-frontend-e2e": "apps/chat/frontend-e2e",
+    "shared-api": "libs/shared/api",
     "shared-data": "libs/shared/data",
-    "shared-middleware": "libs/shared/middleware"
+    "shared-filters": "libs/shared/filters",
+    "shared-interceptors": "libs/shared/interceptors",
+    "shared-state": "libs/shared/state",
+    "shared-utils": "libs/shared/utils"
   }
 }

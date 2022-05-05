@@ -27,9 +27,25 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/node:node",
+      "executor": "@nrwl/node:webpack",
       "options": {
-        "buildTarget": "admin-backend:build"
+        "outputPath": "dist/apps/admin/backend",
+        "main": "apps/admin/backend/src/main.ts",
+        "tsConfig": "apps/admin/backend/tsconfig.app.json",
+        "assets": ["apps/admin/backend/src/assets"],
+        "webpackConfig": "apps/admin/backend/webpack.config.js",
+        "externalDependencies": [
+          "webpack/hot/poll?100",
+          "cache-manager",
+          "class-validator",
+          "class-transformer",
+          "@nestjs/common",
+          "@nestjs/core",
+          "@nestjs/microservices",
+          "@nestjs/mongoose",
+          "mongodb"
+        ],
+        "watch": true
       }
     },
     "lint": {

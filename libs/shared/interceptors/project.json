@@ -1,0 +1,23 @@
+{
+  "root": "libs/shared/interceptors",
+  "sourceRoot": "libs/shared/interceptors/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/interceptors/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/interceptors"],
+      "options": {
+        "jestConfig": "libs/shared/interceptors/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

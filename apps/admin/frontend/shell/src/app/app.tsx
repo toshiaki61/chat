@@ -1,5 +1,4 @@
 import * as React from 'react';
-import NxWelcome from './nx-welcome';
 import { Link, Route, Routes } from 'react-router-dom';
 
 const AdminFrontendCard = React.lazy(
@@ -27,7 +26,7 @@ export function App() {
         </li>
       </ul>
       <Routes>
-        <Route path="/" element={<NxWelcome title="admin-frontend-shell" />} />
+        <Route path="/" element={<AdminFrontendCard />} />
 
         <Route path="/admin-frontend-card" element={<AdminFrontendCard />} />
 
@@ -36,5 +35,3 @@ export function App() {
     </React.Suspense>
   );
 }
-
-export default App;
