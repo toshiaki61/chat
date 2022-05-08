@@ -1,25 +1,21 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { RedisService } from '@liaoliaots/nestjs-redis';
+import { Inject, Injectable, Logger, MessageEvent } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, LeanDocument, FilterQuery, FlattenMaps } from 'mongoose';
-import { Subject } from 'rxjs';
+import { Model, FilterQuery } from 'mongoose';
+import { concatWith, from, map, Observable } from 'rxjs';
 
 import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
 import { ChatReceivedEvent } from './events/chat-received.event';
-import {
-  Message,
-  MessageDocument,
-  JsonMessage,
-  LeanMessage,
-} from './schema/message.schema';
+import { Message, MessageDocument } from './schema/message.schema';
 
 @Injectable()
 export class MessageService {
   #logger = new Logger(MessageService.name);
+  #topicKey = 'chat_received';
   constructor(
-    @Inject('CHAT_SERVICE') private client: ClientProxy,
-    @InjectModel(Message.name) private messageModel: Model<MessageDocument>
+    @InjectModel(Message.name) private messageModel: Model<MessageDocument>,
+    private readonly pubsub: RedisService
   ) {}
 
   create(account: string, createMessageDto: CreateMessageDto) {
@@ -59,37 +55,96 @@ export class MessageService {
     return this.messageModel.findById(id).lean();
   }
 
-  async send(account: string, dto: CreateMessageDto) {
-    const data = await this.create(account, dto);
-    this.#logger.debug('send', data);
-    this.client.emit(
-      'chat_received',
-      new ChatReceivedEvent(data.id, account, [data])
-    );
+  send(account: string, channel: string, dto: CreateMessageDto) {
+    return this.create(account, dto).then((message) => {
+      const data = [message.toJSON()];
+      this.#logger.debug('send', data);
+      const topic = `${this.#topicKey}:${account}:${channel}`;
+      const event = JSON.stringify(
+        new ChatReceivedEvent(message.id, account, data)
+      );
+      return this.pubsub.getClient().publish(topic, event);
+    });
   }
 
-  async emit(account: string, data: LeanMessage[]) {
-    const last = data[data.length - 1];
-    this.client.emit(
-      'chat_received',
-      new ChatReceivedEvent(last.id, account, data)
+  stream(
+    account: string,
+    channel: string,
+    lastEventId?: string
+  ): Observable<MessageEvent> {
+    this.#logger.debug(
+      `lastEventId: ${lastEventId}, channel: ${channel}, account: ${account}`
     );
+    const topic = `${this.#topicKey}:${account}:${channel}`;
+    const sub$ = new Observable<MessageEvent>((observer) => {
+      const client = this.pubsub.getClient();
+      client.subscribe(topic, (err, numberOfChannels) => {
+        if (err) {
+          observer.error(err);
+          return;
+        }
+        this.#logger.debug(
+          `subscribed to ${topic}, numberOfChannels: ${numberOfChannels}`
+        );
+      });
+      const messageHandler = (channel: string, message: string) => {
+        if (channel === topic) {
+          this.#logger.debug(`received message: ${message}`);
+          try {
+            const data = JSON.parse(message);
+            observer.next(data);
+          } catch (e) {
+            observer.error(e);
+          }
+        }
+      };
+      client.on('message', messageHandler);
+
+      return () => {
+        client.off('message', messageHandler);
+        client.unsubscribe(topic);
+      };
+    });
+
+    if (lastEventId) {
+      return from(this.findAll(account, 0, undefined, lastEventId)).pipe(
+        map(
+          ({ results }) =>
+            new ChatReceivedEvent(
+              results[results.length - 1].id,
+              account,
+              results
+            )
+        ),
+        concatWith(sub$)
+      );
+    }
+    return sub$;
+
+    // return combineLatest(subject,   interval(1000));
+
+    // );
+    // return interval(100).pipe(
+    //   bufferTime(1000),
+    //   map((ids) => ({
+    //     id: ids[ids.length - 1] + '',
+    //     // type: 'message',
+    //     data: new ChatReceivedEvent(
+    //       ids[ids.length - 1] + '',
+    //       'test',
+    //       ids.map((id) => ({
+    //         id: id + '',
+    //         _id: id + '',
+    //         account: 'test',
+    //         type: 'system',
+    //         message: `message-${id}`,
+    //         from: '',
+    //         to: '',
+    //       }))
+    //     ),
+    //   }))
+    // );
+
+    // return subject.asObservable();
   }
-
-  // stream(key: string, lastEventId?: string) {
-  //   const subject = this.#map.get(key);
-  //   if (!subject) {
-  //     console.log('stream', key);
-  //     const subject = new Subject<any>();
-
-  //     subject.subscribe({
-  //       complete: () => {
-  //         this.#map.delete(key);
-  //       },
-  //     });
-  //     this.#map.set(key, subject);
-  //     return subject;
-  //   }
-  //   return subject;
-  // }
 }

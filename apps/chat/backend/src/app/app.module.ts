@@ -1,3 +1,10 @@
+import { config } from 'process';
+
+import {
+  ClusterModule,
+  ClusterModuleOptions,
+  RedisModule,
+} from '@liaoliaots/nestjs-redis';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
@@ -8,6 +15,7 @@ import * as mongoose from 'mongoose';
 import { MessageModule } from '@chat-ex/chat/backend/modules/message';
 import { Env } from '@chat-ex/shared/data';
 import { ExceptionsLoggingFilter } from '@chat-ex/shared/filters';
+import { exponentialJitterBackoff } from '@chat-ex/shared/utils';
 
 const logger = LoggerFactory.createLogger('Mongoose');
 mongoose.set('debug', (collectionName, method, ...args) => {
@@ -15,11 +23,25 @@ mongoose.set('debug', (collectionName, method, ...args) => {
 });
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
+    ConfigModule.forRoot({ isGlobal: true }),
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService<Env>) => ({
+        readyLog: true,
+        config: {
+          url: config.get('REDIS_URI'),
+          enableOfflineQueue: true,
+          enableReadyCheck: true,
+          scaleReads: 'all',
+          retryStrategy: (times) => exponentialJitterBackoff(times),
+          reconnectOnError: () => true,
+        },
+      }),
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: async (config: ConfigService<Env>) => ({
         uri: config.get('MONGODB_URI'),
         connectionFactory: (connection) => {
@@ -35,7 +57,6 @@ mongoose.set('debug', (collectionName, method, ...args) => {
           return connection;
         },
       }),
-      inject: [ConfigService],
     }),
 
     MessageModule,

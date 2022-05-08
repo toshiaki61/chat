@@ -1,7 +1,6 @@
 import { createEntityAdapter, EntityState } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Subscription, timer } from 'rxjs';
-import { retry } from 'rxjs/operators';
+import { Subscription, timer, retry } from 'rxjs';
 
 import {
   exponentialJitterBackoff,
@@ -20,9 +19,7 @@ type ChatQueryMessage = {
 };
 type ChatMessage = ChatSystemMessage | ChatQueryMessage;
 type ChatReceivedEvent = { id: string; data: ChatMessage[] };
-const messagesAdapter = createEntityAdapter<ChatMessage>({
-  selectId: (m) => m._id,
-});
+const messagesAdapter = createEntityAdapter<ChatMessage>({});
 
 export const api = createApi({
   reducerPath: 'messageApi',
