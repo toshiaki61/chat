@@ -1,14 +1,12 @@
-import { useChannelQuery } from '@chat-ex/chat/frontend/api/message';
+import clsx from 'clsx';
 
 import { Form } from './form';
 import { Interaction } from './interaction';
 import styles from './layout.module.scss';
 
 export function Layout() {
-  // const result = useChannelQuery('test');
-  // console.log('result', result);
   return (
-    <section className={styles['container']}>
+    <section className={clsx(styles['container'], 'bg-[#212e42] rounded-3xl')}>
       <Interaction />
       <Form />
     </section>

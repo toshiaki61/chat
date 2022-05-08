@@ -86,11 +86,17 @@
     "webpack-pnp-externals": "^1.1.0"
   },
   "dependencies": {
+    "@js-temporal/polyfill": "^0.4.1",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
     "@reduxjs/toolkit": "1.8.1",
+    "@tailwindcss/forms": "^0.5.1",
+    "autoprefixer": "10.4.5",
+    "clsx": "^1.1.1",
     "core-js": "^3.6.5",
+    "eslint-plugin-tailwindcss": "^3.5.0",
+    "postcss": "^8.4.13",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-redux": "8.0.0",
@@ -98,6 +104,7 @@
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.7",
     "rxjs": "^7.0.0",
+    "tailwindcss": "^3.0.24",
     "tslib": "^2.3.0"
   }
 }

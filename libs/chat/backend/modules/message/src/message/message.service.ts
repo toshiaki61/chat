@@ -14,12 +14,16 @@ export class MessageService {
   #logger = new Logger(MessageService.name);
   #topicKey = 'chat_received';
   constructor(
+    @Inject('CHAT_SERVICE') private client: ClientProxy,
     @InjectModel(Message.name) private messageModel: Model<MessageDocument>,
     private readonly pubsub: RedisService
   ) {}
 
   create(account: string, createMessageDto: CreateMessageDto) {
-    const created = new this.messageModel({ account, ...createMessageDto });
+    const created = new this.messageModel({
+      account,
+      ...createMessageDto,
+    });
     return created.save();
   }
 
@@ -55,16 +59,13 @@ export class MessageService {
     return this.messageModel.findById(id).lean();
   }
 
-  send(account: string, channel: string, dto: CreateMessageDto) {
-    return this.create(account, dto).then((message) => {
-      const data = [message.toJSON()];
-      this.#logger.debug('send', data);
-      const topic = `${this.#topicKey}:${account}:${channel}`;
-      const event = JSON.stringify(
-        new ChatReceivedEvent(message.id, account, data)
-      );
-      return this.pubsub.getClient().publish(topic, event);
-    });
+  async send(account: string, channel: string, dto: CreateMessageDto) {
+    const data = await this.create(account, dto);
+    this.#logger.debug('send', data);
+    return this.client.emit(
+      `${this.#topicKey}:${account}:${channel}`,
+      new ChatReceivedEvent(data.id, account, [data])
+    );
   }
 
   stream(
@@ -106,7 +107,7 @@ export class MessageService {
       };
     });
 
-    if (lastEventId) {
+    if (lastEventId && /^[\d]+$/.test(lastEventId)) {
       return from(this.findAll(account, 0, undefined, lastEventId)).pipe(
         map(
           ({ results }) =>

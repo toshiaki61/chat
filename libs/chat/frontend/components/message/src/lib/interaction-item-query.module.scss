@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  align-items: end;
+  padding-right: 10px;
+}
+.message {
+  background-color: #212e42;
+  padding: 1.5rem;
+  color: #f3f6fa;
+  text-align: left;
+}
+.date {
+  color: grey;
+  padding-top: 0.5rem;
+}

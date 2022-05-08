@@ -1,36 +1,20 @@
 // import { useChannelQuery, useSendMessageMutation } from './api';
+import clsx from 'clsx';
 import { useState, useEffect, useRef } from 'react';
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 
 import { useChannelQuery } from '@chat-ex/chat/frontend/api/message';
 
-// import { user, generateUsers, toggleBg } from './data';
+import { InteractionItem } from './interaction-item';
 import styles from './interaction.module.scss';
 
-/* eslint-disable-next-line */
-// export interface InteractionProps {}
-
-// export function Interaction(props: InteractionProps) {
-//   const result = useChannelQuery('test');
-
-//   return (
-//     <div style={{ maxHeight: 300 }}>
-//       {result.data?.ids.map((id) => {
-//         return <div key={id}>{result.data?.entities[id]?.message}</div>;
-//       })}
-//     </div>
-//   );
-// }
-
 export function Interaction() {
-  // const [users, setUsers] = useState(() => generateUsers(100));
   const appendInterval = useRef(0);
   const virtuosoRef = useRef<VirtuosoHandle>(null);
   const [atBottom, setAtBottom] = useState(false);
   const showButtonTimeoutRef = useRef(0);
   const [showButton, setShowButton] = useState(false);
   const result = useChannelQuery('test');
-  console.log('result', result);
   useEffect(() => {
     return () => {
       clearInterval(appendInterval.current);
@@ -51,9 +35,10 @@ export function Interaction() {
   }, [atBottom, setShowButton]);
 
   return (
-    <>
+    <div className={clsx(styles['container'], 'flex rounded-3xl')}>
       <Virtuoso
-        style={{ height: 400, width: '100%' }}
+        className={clsx(styles['scroller'])}
+        // style={{ height: 400, width: '100%' }}
         ref={virtuosoRef}
         initialTopMostItemIndex={999}
         data={result.data?.ids}
@@ -73,22 +58,12 @@ export function Interaction() {
           }
           setAtBottom(bottom);
         }}
-        itemContent={(index, id) => {
+        itemContent={(_, id) => {
           const message = result.data?.entities[id];
           if (!message) {
             return null;
           }
-          return (
-            <div
-              style={{
-                // backgroundColor: toggleBg(index),
-                padding: '1rem 0.5rem',
-              }}
-            >
-              <h4>{message.message}</h4>
-              <div style={{ marginTop: '1rem' }}>{message.message}</div>
-            </div>
-          );
+          return <InteractionItem message={message} key={id} />;
         }}
         followOutput={'auto'}
       />
@@ -105,6 +80,6 @@ export function Interaction() {
           Bottom
         </button>
       )}
-    </>
+    </div>
   );
 }

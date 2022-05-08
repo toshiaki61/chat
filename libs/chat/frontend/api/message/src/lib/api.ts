@@ -7,18 +7,8 @@ import {
   fromEventSource,
 } from '@chat-ex/shared/utils';
 
-type ChatSystemMessage = {
-  _id: string;
-  type: 'text';
-  message: string;
-};
-type ChatQueryMessage = {
-  _id: string;
-  type: 'query';
-  message: string;
-};
-type ChatMessage = ChatSystemMessage | ChatQueryMessage;
-type ChatReceivedEvent = { id: string; data: ChatMessage[] };
+import { ChatMessage, ChatReceivedEvent } from './interface';
+
 const messagesAdapter = createEntityAdapter<ChatMessage>({});
 
 export const api = createApi({
@@ -35,7 +25,7 @@ export const api = createApi({
       query: ({ id, ...patch }) => ({
         url: `message/${id}`,
         method: 'POST',
-        body: patch,
+        body: { ...patch, type: 'query' },
       }),
     }),
 

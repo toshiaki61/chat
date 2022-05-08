@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx", "import"],
+  "plugins": ["@nrwl/nx", "import", "tailwindcss"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -27,7 +27,8 @@
         "plugin:@nrwl/nx/typescript",
         "plugin:import/errors",
         "plugin:import/warnings",
-        "plugin:import/typescript"
+        "plugin:import/typescript",
+        "plugin:tailwindcss/recommended"
       ],
       "rules": {
         "import/no-unresolved": [
@@ -61,6 +62,19 @@
                 "position": "before"
               }
             ]
+          }
+        ],
+        "tailwindcss/no-custom-classname": [
+          "warn",
+          {
+            "cssFiles": [
+              "**/*.scss",
+              "!**/node_modules",
+              "!**/.*",
+              "!**/dist",
+              "!**/build"
+            ],
+            "whiteList": ["form-input"]
           }
         ]
       },

@@ -1,21 +1,14 @@
-/*
- * Replace this with your own classes
- *
- * e.g.
- * .container {
- * }
-*/
+$header-height: 60px;
+$footer-height: 6rem;
+
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-  background-color: #fafafa;
-  border-radius: 4px;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.08);
-  overflow: hidden;
+  background-color: #f3f6fa;
+  min-height: calc(100vh - $footer-height);
+  padding-top: $header-height;
+}
+.scroller {
+  min-height: calc(100vh - $footer-height - $header-height);
+  background-color: transparent;
+  padding: 10px;
+  width: calc(100% - 20px);
 }
