@@ -1,16 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Param,
-  Sse,
-  MessageEvent,
-  Query,
-  Headers,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { LoggerFactory } from 'json-logger-service';
-import { Observable } from 'rxjs';
 
 import { CreateMessageDto } from './dto/create-message.dto';
 import { MessageService } from './message.service';
@@ -38,14 +27,5 @@ export class MessageController {
     @Body() dto: CreateMessageDto
   ) {
     return this.messageService.send(account, channel, dto);
-  }
-
-  @Sse(':channel')
-  subscribe(
-    account = 'test',
-    @Headers('last-event-id') lastEventId: string | undefined,
-    @Param('channel') channel: string
-  ): Observable<MessageEvent> {
-    return this.messageService.stream(account, channel, lastEventId);
   }
 }

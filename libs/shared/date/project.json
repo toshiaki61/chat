@@ -1,0 +1,23 @@
+{
+  "root": "libs/shared/date",
+  "sourceRoot": "libs/shared/date/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shared/date/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/date"],
+      "options": {
+        "jestConfig": "libs/shared/date/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

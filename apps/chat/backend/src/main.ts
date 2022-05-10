@@ -1,10 +1,6 @@
-import {
-  ClassSerializerInterceptor,
-  Logger,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { JsonLoggerService, RequestLogger } from 'json-logger-service';

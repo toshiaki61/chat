@@ -16,10 +16,14 @@
     "chat-frontend-api-message": "libs/chat/frontend/api/message",
     "chat-frontend-components-message": "libs/chat/frontend/components/message",
     "chat-frontend-e2e": "apps/chat/frontend-e2e",
+    "services-chat": "apps/services/chat",
     "shared-api": "libs/shared/api",
     "shared-data": "libs/shared/data",
+    "shared-date": "libs/shared/date",
+    "shared-events": "libs/shared/events",
     "shared-filters": "libs/shared/filters",
     "shared-interceptors": "libs/shared/interceptors",
+    "shared-schema": "libs/shared/schema",
     "shared-state": "libs/shared/state",
     "shared-utils": "libs/shared/utils"
   }

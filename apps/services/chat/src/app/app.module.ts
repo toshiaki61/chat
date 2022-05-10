@@ -6,10 +6,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { LoggerFactory } from 'json-logger-service';
 import * as mongoose from 'mongoose';
 
-import { MessageModule } from '@chat-ex/chat/backend/modules/message';
 import { Env } from '@chat-ex/shared/data';
 import { ExceptionsLoggingFilter } from '@chat-ex/shared/filters';
+import { Message, MessageSchema } from '@chat-ex/shared/schema';
 import { exponentialJitterBackoff } from '@chat-ex/shared/utils';
+
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 const logger = LoggerFactory.createLogger('Mongoose');
 mongoose.set('debug', (collectionName, method, ...args) => {
@@ -52,14 +55,17 @@ mongoose.set('debug', (collectionName, method, ...args) => {
         },
       }),
     }),
+    MongooseModule.forFeature([{ name: Message.name, schema: MessageSchema }]),
 
-    MessageModule,
+    // MessageModule,
   ],
   providers: [
     {
       provide: APP_FILTER,
       useClass: ExceptionsLoggingFilter,
     },
+    AppService,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}

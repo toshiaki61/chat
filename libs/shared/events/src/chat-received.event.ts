@@ -1,4 +1,4 @@
-import { LeanMessage } from '../schema/message.schema';
+import { LeanMessage } from '@chat-ex/shared/schema';
 
 export class ChatReceivedEvent {
   constructor(id: string, account: string, data: LeanMessage[]) {

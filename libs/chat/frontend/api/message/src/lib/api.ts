@@ -39,7 +39,7 @@ export const api = createApi({
         { cacheDataLoaded, cacheEntryRemoved, updateCachedData }
       ) {
         const event$ = fromEventSource<ChatReceivedEvent>(
-          (process.env['EVENT_SOURCE_URI'] ?? '/api/message') + `/${topic}`,
+          (process.env['EVENT_SOURCE_URI'] ?? '/chat/message') + `/${topic}`,
           {
             withCredentials:
               process.env['EVENT_SOURCE_WITH_CREDENTIALS'] === 'true',

@@ -1,16 +1,17 @@
 {
-  "root": "apps/admin/backend",
-  "sourceRoot": "apps/admin/backend/src",
+  "root": "apps/services/chat",
+  "sourceRoot": "apps/services/chat/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/admin/backend",
-        "main": "apps/admin/backend/src/main.ts",
-        "tsConfig": "apps/admin/backend/tsconfig.app.json",
-        "assets": ["apps/admin/backend/src/assets"]
+        "outputPath": "dist/apps/services/chat",
+        "main": "apps/services/chat/src/main.ts",
+        "tsConfig": "apps/services/chat/tsconfig.app.json",
+        "assets": ["apps/services/chat/src/assets"],
+        "generatePackageJson": true
       },
       "configurations": {
         "production": {
@@ -19,22 +20,21 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/admin/backend/src/environments/environment.ts",
-              "with": "apps/admin/backend/src/environments/environment.prod.ts"
+              "replace": "apps/services/chat/src/environments/environment.ts",
+              "with": "apps/services/chat/src/environments/environment.prod.ts"
             }
-          ],
-          "generatePackageJson": true
+          ]
         }
       }
     },
     "serve": {
       "executor": "@nrwl/node:webpack",
       "options": {
-        "outputPath": "dist/apps/admin/backend",
-        "main": "apps/admin/backend/src/main.ts",
-        "tsConfig": "apps/admin/backend/tsconfig.app.json",
-        "assets": ["apps/admin/backend/src/assets"],
-        "webpackConfig": "apps/admin/backend/webpack.config.js",
+        "outputPath": "dist/apps/services/chat",
+        "main": "apps/services/chat/src/main.ts",
+        "tsConfig": "apps/services/chat/tsconfig.app.json",
+        "assets": ["apps/services/chat/src/assets"],
+        "webpackConfig": "apps/services/chat/webpack.config.js",
         "externalDependencies": [
           "webpack/hot/poll?100",
           "cache-manager",
@@ -42,8 +42,9 @@
           "class-transformer",
           "@nestjs/common",
           "@nestjs/core",
+          "@nestjs/mapped-types",
           "@nestjs/microservices",
-          "@nestjs/mongoose",
+          "@nestjs/swagger",
           "mongodb"
         ],
         "watch": true
@@ -53,14 +54,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/admin/backend/**/*.ts"]
+        "lintFilePatterns": ["apps/services/chat/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/admin/backend"],
+      "outputs": ["coverage/apps/services/chat"],
       "options": {
-        "jestConfig": "apps/admin/backend/jest.config.ts",
+        "jestConfig": "apps/services/chat/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -69,8 +70,8 @@
       "builder": "@nrwl/workspace:run-commands",
       "options": {
         "commands": [
-          "pnx run admin-backend:build:production",
-          "docker build -f ./apps/admin/backend/Dockerfile . -t admin-backend"
+          "pnx run services-chat:build:production",
+          "docker build -f ./apps/services/chat/Dockerfile . -t services-chat"
         ],
         "parallel": false
       }

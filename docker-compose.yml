@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  services-chat:
+    image: services-chat
+    build: ./apps/services/chat
+    container_name: services-chat
+  admin-backend:
+    image: admin-backend
+    build: ./apps/admin/backend
+    container_name: admin-backend
+  chat-backend:
+    image: chat-backend
+    build: ./apps/chat/backend
+    container_name: chat-backend

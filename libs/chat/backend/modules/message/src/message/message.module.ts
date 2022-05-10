@@ -1,12 +1,12 @@
-import { Module, MessageEvent } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Subject } from 'rxjs';
+
+import { Message, MessageSchema } from '@chat-ex/shared/schema';
 
 import { MessageController } from './message.controller';
 import { MessageService } from './message.service';
-import { Message, MessageSchema } from './schema/message.schema';
 
 @Module({
   imports: [

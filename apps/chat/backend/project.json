@@ -22,7 +22,8 @@
               "replace": "apps/chat/backend/src/environments/environment.ts",
               "with": "apps/chat/backend/src/environments/environment.prod.ts"
             }
-          ]
+          ],
+          "generatePackageJson": true
         }
       }
     },
@@ -62,6 +63,17 @@
       "options": {
         "jestConfig": "apps/chat/backend/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+
+    "deploy": {
+      "builder": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "pnx run chat-backend:build:production",
+          "docker build -f ./apps/chat/backend/Dockerfile . -t chat-backend"
+        ],
+        "parallel": false
       }
     }
   },

@@ -1,13 +1,12 @@
-import { RedisService } from '@liaoliaots/nestjs-redis';
-import { Inject, Injectable, Logger, MessageEvent } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, FilterQuery } from 'mongoose';
-import { concatWith, from, map, Observable } from 'rxjs';
+
+import { ChatReceivedEvent } from '@chat-ex/shared/events';
+import { Message, MessageDocument } from '@chat-ex/shared/schema';
 
 import { CreateMessageDto } from './dto/create-message.dto';
-import { ChatReceivedEvent } from './events/chat-received.event';
-import { Message, MessageDocument } from './schema/message.schema';
 
 @Injectable()
 export class MessageService {
@@ -15,8 +14,7 @@ export class MessageService {
   #topicKey = 'chat_received';
   constructor(
     @Inject('CHAT_SERVICE') private client: ClientProxy,
-    @InjectModel(Message.name) private messageModel: Model<MessageDocument>,
-    private readonly pubsub: RedisService
+    @InjectModel(Message.name) private messageModel: Model<MessageDocument>
   ) {}
 
   create(account: string, createMessageDto: CreateMessageDto) {
@@ -66,86 +64,5 @@ export class MessageService {
       `${this.#topicKey}:${account}:${channel}`,
       new ChatReceivedEvent(data.id, account, [data])
     );
-  }
-
-  stream(
-    account: string,
-    channel: string,
-    lastEventId?: string
-  ): Observable<MessageEvent> {
-    this.#logger.debug(
-      `lastEventId: ${lastEventId}, channel: ${channel}, account: ${account}`
-    );
-    const topic = `${this.#topicKey}:${account}:${channel}`;
-    const sub$ = new Observable<MessageEvent>((observer) => {
-      const client = this.pubsub.getClient();
-      client.subscribe(topic, (err, numberOfChannels) => {
-        if (err) {
-          observer.error(err);
-          return;
-        }
-        this.#logger.debug(
-          `subscribed to ${topic}, numberOfChannels: ${numberOfChannels}`
-        );
-      });
-      const messageHandler = (channel: string, message: string) => {
-        if (channel === topic) {
-          this.#logger.debug(`received message: ${message}`);
-          try {
-            const data = JSON.parse(message);
-            observer.next(data);
-          } catch (e) {
-            observer.error(e);
-          }
-        }
-      };
-      client.on('message', messageHandler);
-
-      return () => {
-        client.off('message', messageHandler);
-        client.unsubscribe(topic);
-      };
-    });
-
-    if (lastEventId && /^[\d]+$/.test(lastEventId)) {
-      return from(this.findAll(account, 0, undefined, lastEventId)).pipe(
-        map(
-          ({ results }) =>
-            new ChatReceivedEvent(
-              results[results.length - 1].id,
-              account,
-              results
-            )
-        ),
-        concatWith(sub$)
-      );
-    }
-    return sub$;
-
-    // return combineLatest(subject,   interval(1000));
-
-    // );
-    // return interval(100).pipe(
-    //   bufferTime(1000),
-    //   map((ids) => ({
-    //     id: ids[ids.length - 1] + '',
-    //     // type: 'message',
-    //     data: new ChatReceivedEvent(
-    //       ids[ids.length - 1] + '',
-    //       'test',
-    //       ids.map((id) => ({
-    //         id: id + '',
-    //         _id: id + '',
-    //         account: 'test',
-    //         type: 'system',
-    //         message: `message-${id}`,
-    //         from: '',
-    //         to: '',
-    //       }))
-    //     ),
-    //   }))
-    // );
-
-    // return subject.asObservable();
   }
 }

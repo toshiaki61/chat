@@ -20,6 +20,16 @@
         "jestConfig": "libs/chat/frontend/components/message/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "stylelint": {
+      "executor": "nx-stylelint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/chat/frontend/components/message/**/*.css",
+          "libs/chat/frontend/components/message/**/*.scss"
+        ]
+      }
     }
   }
 }
