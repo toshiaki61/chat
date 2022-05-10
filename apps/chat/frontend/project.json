@@ -79,6 +79,16 @@
         "jestConfig": "apps/chat/frontend/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "stylelint": {
+      "executor": "nx-stylelint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "apps/chat/frontend/**/*.css",
+          "apps/chat/frontend/**/*.scss"
+        ]
+      }
     }
   },
   "tags": []

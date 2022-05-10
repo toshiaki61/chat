@@ -96,6 +96,16 @@
           "buildTarget": "admin-frontend-shell:build:production"
         }
       }
+    },
+    "stylelint": {
+      "executor": "nx-stylelint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "apps/admin/frontend/shell/**/*.css",
+          "apps/admin/frontend/shell/**/*.scss"
+        ]
+      }
     }
   },
   "tags": []

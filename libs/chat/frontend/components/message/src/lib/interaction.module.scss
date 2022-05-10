@@ -2,13 +2,14 @@ $header-height: 60px;
 $footer-height: 6rem;
 
 .container {
-  background-color: #f3f6fa;
   min-height: calc(100vh - $footer-height);
   padding-top: $header-height;
+  background-color: #f3f6fa;
 }
+
 .scroller {
-  min-height: calc(100vh - $footer-height - $header-height);
-  background-color: transparent;
-  padding: 10px;
   width: calc(100% - 20px);
+  min-height: calc(100vh - $footer-height - $header-height);
+  padding: 10px;
+  background-color: transparent;
 }

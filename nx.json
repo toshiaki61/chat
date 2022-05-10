@@ -11,13 +11,14 @@
       "dependencies": "*",
       "devDependencies": "*"
     },
-    ".eslintrc.json": "*"
+    ".eslintrc.json": "*",
+    ".stylelintrc.json": "*"
   },
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "cacheableOperations": ["build", "lint", "test", "e2e", "stylelint"],
         "accessToken": "MDYzZjI5ZjMtNWUwYS00NWYyLWJmNzAtZGI4NTM4M2EwOWI4fHJlYWQtd3JpdGU="
       }
     }

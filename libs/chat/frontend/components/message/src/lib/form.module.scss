@@ -1,11 +1,12 @@
 .input {
-  background-color: transparent;
-  caret-color: #f3f6fa;
-  color: #f3f6fa;
-  opacity: 0.9;
   width: calc(100vw - 80px);
   font-size: 1.5rem;
+  color: #f3f6fa;
+  background-color: transparent;
+  opacity: 0.9;
+  caret-color: #f3f6fa;
 }
+
 .button {
   color: #f3f6fa;
 }
