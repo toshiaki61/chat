@@ -33,6 +33,7 @@
       "@chat-ex/shared/events": ["libs/shared/events/src/index.ts"],
       "@chat-ex/shared/filters": ["libs/shared/filters/src/index.ts"],
       "@chat-ex/shared/interceptors": ["libs/shared/interceptors/src/index.ts"],
+      "@chat-ex/shared/logger": ["libs/shared/logger/src/index.ts"],
       "@chat-ex/shared/schema": ["libs/shared/schema/src/index.ts"],
       "@chat-ex/shared/state": ["libs/shared/state/src/index.ts"],
       "@chat-ex/shared/utils": ["libs/shared/utils/src/index.ts"]

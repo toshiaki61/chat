@@ -13,8 +13,9 @@ import { Env } from '@chat-ex/shared/data';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
+  const logger = new JsonLoggerService('Nest');
   const app = await NestFactory.create(AppModule, {
-    logger: new JsonLoggerService('NestServer'),
+    logger,
   });
   app.use(RequestLogger.buildExpressRequestLogger());
   const config = app.get<ConfigService<Env>>(ConfigService);

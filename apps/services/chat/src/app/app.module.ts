@@ -8,6 +8,7 @@ import * as mongoose from 'mongoose';
 
 import { Env } from '@chat-ex/shared/data';
 import { ExceptionsLoggingFilter } from '@chat-ex/shared/filters';
+import { LoggerModule } from '@chat-ex/shared/logger';
 import { Message, MessageSchema } from '@chat-ex/shared/schema';
 import { exponentialJitterBackoff } from '@chat-ex/shared/utils';
 
@@ -56,8 +57,7 @@ mongoose.set('debug', (collectionName, method, ...args) => {
       }),
     }),
     MongooseModule.forFeature([{ name: Message.name, schema: MessageSchema }]),
-
-    // MessageModule,
+    LoggerModule.forRootAsync(),
   ],
   providers: [
     {

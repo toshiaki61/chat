@@ -9,8 +9,8 @@ import * as mongoose from 'mongoose';
 import { MessageModule } from '@chat-ex/chat/backend/modules/message';
 import { Env } from '@chat-ex/shared/data';
 import { ExceptionsLoggingFilter } from '@chat-ex/shared/filters';
+import { LoggerModule } from '@chat-ex/shared/logger';
 import { exponentialJitterBackoff } from '@chat-ex/shared/utils';
-
 const logger = LoggerFactory.createLogger('Mongoose');
 mongoose.set('debug', (collectionName, method, ...args) => {
   logger.debug(`${collectionName}.${method}:${JSON.stringify(args)}`);
@@ -52,7 +52,7 @@ mongoose.set('debug', (collectionName, method, ...args) => {
         },
       }),
     }),
-
+    LoggerModule,
     MessageModule,
   ],
   providers: [

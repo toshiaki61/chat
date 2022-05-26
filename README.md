@@ -2,89 +2,96 @@
 
 This project was generated using [Nx](https://nx.dev).
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+The most powerful chat system i've ever come up with.
 
-🔎 **Smart, Fast and Extensible Build System**
+## features
 
-## Adding capabilities to your workspace
+- eslint import order
+- tailwind
+- scss
+  - nx stylelint
+  - typed scss modules
+- pubsub
+  - redis
+- react
+  - mfe
+- nestjs
+  - hot reload
+- bunyan
+- mongoose
+- redux toolkit
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+## directory structure
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+```zsh
+apps/
+  admin/
+    frontend/
+      shell/ # project(mfe)
+      account/ # project(mfe-remote)
+      ...
+    backend/ # project
 
-Below are our core plugins:
+  chat/
+    ...
+    frontend/ # project
+    backend/ # project
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+  services/
+    account/ # project
+    chat/ # project
+    ...
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+libs/
+  admin/
+    frontend/
+      components/
+        {feature} # project
+      state/ # project
+      shared/ # project
+    backend/
+      modules/ # nest module
+        {feature} # project
+      shared/ # project
+  chat/
+    ...
+  shared/
+    api/ # project
+    data/ # project
+    state/ # project
+    utils/ # project
 
-## Generate an application
+```
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+```mermaid
+sequenceDiagram
+    autonumber
+    actor user
+    participant stream as stream server
+    participant chat as chat server
+    participant pubsub
+    participant bot as bot service
+    participant integration as integration service
+    participant db
+    stream->>pubsub: subscribe
+    user->>+stream: sse
+    bot->>pubsub: subscribe
+    integration->>pubsub: subscribe
+    user->>chat: message
+    chat->>db: save
+    chat->>pubsub: publish
+    Note left of pubsub: message_received
+    pubsub->>+bot: publish
+    pubsub->>+integration: publish
+    bot->>bot: brain
+    bot->>db: save
+    bot->>-pubsub: publish
+    Note right of pubsub: bot reply
+    integration->>integration: reply
+    integration->>db: save
+    integration->>-pubsub: publish
+    Note right of pubsub: reply from operator
+    pubsub->>stream: publish
+    stream->>-user: sse
 
-> You can use any of the plugins above to generate applications as well.
-
-When using Nx, you can create multiple applications and libraries in the same workspace.
-
-## Generate a library
-
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
-
-> You can also use any of the plugins above to generate libraries as well.
-
-Libraries are shareable across libraries and applications. They can be imported from `@chat-ex/mylib`.
-
-## Development server
-
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
-
-## Build
-
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `nx e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-## ☁ Nx Cloud
-
-### Distributed Computation Caching & Distributed Task Execution
-
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+```

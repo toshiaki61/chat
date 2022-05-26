@@ -1,19 +1,20 @@
 import { RedisService } from '@liaoliaots/nestjs-redis';
-import { Injectable, Logger, MessageEvent } from '@nestjs/common';
+import { Injectable, MessageEvent } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, FilterQuery } from 'mongoose';
 import { concatWith, from, map, Observable } from 'rxjs';
 
 import { ChatReceivedEvent } from '@chat-ex/shared/events';
+import { InjectLogger, LoggerService } from '@chat-ex/shared/logger';
 import { Message, MessageDocument } from '@chat-ex/shared/schema';
 
 @Injectable()
 export class AppService {
-  #logger = new Logger(AppService.name);
   #topicKey = 'chat_received';
   constructor(
     @InjectModel(Message.name) private messageModel: Model<MessageDocument>,
-    private readonly pubsub: RedisService
+    private readonly pubsub: RedisService,
+    @InjectLogger(AppService.name) private readonly logger: LoggerService
   ) {}
 
   async findAll(account: string, startId?: string) {
@@ -34,7 +35,7 @@ export class AppService {
     channel: string,
     lastEventId?: string
   ): Observable<MessageEvent> {
-    this.#logger.debug(
+    this.logger.debug(
       `lastEventId: ${lastEventId}, channel: ${channel}, account: ${account}`
     );
     const topic = `${this.#topicKey}:${account}:${channel}`;
@@ -45,13 +46,13 @@ export class AppService {
           observer.error(err);
           return;
         }
-        this.#logger.debug(
+        this.logger.debug(
           `subscribed to ${topic}, numberOfChannels: ${numberOfChannels}`
         );
       });
       const messageHandler = (channel: string, message: string) => {
         if (channel === topic) {
-          this.#logger.debug(`received message: ${message}`);
+          this.logger.debug(`received message: ${message}`);
           try {
             const data = JSON.parse(message);
             observer.next(data);

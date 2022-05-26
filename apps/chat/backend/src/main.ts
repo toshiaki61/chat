@@ -11,7 +11,7 @@ import { AppModule } from './app';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: new JsonLoggerService('NestServer'),
+    logger: new JsonLoggerService('Nest'),
   });
   app.use(RequestLogger.buildExpressRequestLogger());
   const config = app.get<ConfigService<Env>>(ConfigService);

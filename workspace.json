@@ -23,6 +23,7 @@
     "shared-events": "libs/shared/events",
     "shared-filters": "libs/shared/filters",
     "shared-interceptors": "libs/shared/interceptors",
+    "shared-logger": "libs/shared/logger",
     "shared-schema": "libs/shared/schema",
     "shared-state": "libs/shared/state",
     "shared-utils": "libs/shared/utils"
